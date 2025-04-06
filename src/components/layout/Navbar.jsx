@@ -65,9 +65,10 @@ const Navbar = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [anchorElLang, setAnchorElLang] = useState(null);
   const [navbarTransparent, setNavbarTransparent] = useState(true);
+  const [submenuAnchor, setSubmenuAnchor] = useState(null);
+  const [activeSubmenu, setActiveSubmenu] = useState(null);
+  const [openSubmenu, setOpenSubmenu] = useState(false);
   const [mobileSubmenuOpen, setMobileSubmenuOpen] = useState(null);
-  const [desktopSubmenuAnchor, setDesktopSubmenuAnchor] = useState(null);
-  const [activeDesktopSubmenu, setActiveDesktopSubmenu] = useState(null);
 
   // Use language context
   const { language, setLanguage, translate } = useLanguage();
@@ -178,18 +179,20 @@ const Navbar = () => {
     handleCloseUserMenu();
   };
 
+  const handleSubmenuOpen = (event, menuKey) => {
+    setSubmenuAnchor(event.currentTarget);
+    setActiveSubmenu(menuKey);
+    setOpenSubmenu(true);
+  };
+
+  const handleSubmenuClose = () => {
+    setSubmenuAnchor(null);
+    setActiveSubmenu(null);
+    setOpenSubmenu(false);
+  };
+
   const handleMobileSubmenuClick = (menuKey) => {
     setMobileSubmenuOpen(mobileSubmenuOpen === menuKey ? null : menuKey);
-  };
-
-  const handleDesktopSubmenuOpen = (event, menuKey) => {
-    setDesktopSubmenuAnchor(event.currentTarget);
-    setActiveDesktopSubmenu(menuKey);
-  };
-
-  const handleDesktopSubmenuClose = () => {
-    setDesktopSubmenuAnchor(null);
-    setActiveDesktopSubmenu(null);
   };
 
   const authPages = [
@@ -204,7 +207,8 @@ const Navbar = () => {
   if (user?.role === 'admin') {
     authPages.push(
       { title: translate('nav.admin'), path: '/admin' },
-      { title: translate('nav.createEvent'), path: '/events/create' }
+      { title: translate('nav.createEvent'), path: '/events/create' },
+      { title: translate('nav.manageEvents'), path: '/events/manage' }
     );
   } else if (user?.role === 'Official_member') {
     authPages.push({ title: translate('nav.management'), path: '/management' });
@@ -290,10 +294,7 @@ const Navbar = () => {
                 horizontal: 'left',
               }}
               open={Boolean(anchorElNav)}
-              onClose={() => {
-                handleCloseNavMenu();
-                setMobileSubmenuOpen(null);
-              }}
+              onClose={handleCloseNavMenu}
               sx={{
                 display: { xs: 'block', md: 'none' },
                 '& .MuiPaper-root': {
@@ -419,6 +420,38 @@ const Navbar = () => {
                   )}
                 </div>
               ))}
+              {isAuthenticated && (
+                <>
+                  <Divider sx={{ my: 1 }} />
+                  {authPages.map((page) => (
+                    <MenuItem
+                      key={page.title}
+                      component={RouterLink}
+                      to={page.path}
+                      onClick={handleCloseNavMenu}
+                      selected={location.pathname === page.path}
+                      sx={{
+                        py: 1.5,
+                        px: 2,
+                        minHeight: '48px',
+                        '&:hover': {
+                          backgroundColor: 'rgba(46, 125, 50, 0.08)',
+                        },
+                        '&.Mui-selected': {
+                          backgroundColor: 'rgba(46, 125, 50, 0.12)',
+                        }
+                      }}
+                    >
+                      <ListItemText 
+                        primary={page.title}
+                        primaryTypographyProps={{
+                          fontWeight: location.pathname === page.path ? 600 : 400
+                        }}
+                      />
+                    </MenuItem>
+                  ))}
+                </>
+              )}
             </Menu>
 
             {/* Desktop Menu */}
@@ -427,22 +460,34 @@ const Navbar = () => {
                 <div key={item.key}>
                   {item.submenu ? (
                     <Button
-                      onClick={(e) => handleDesktopSubmenuOpen(e, item.key)}
+                      onClick={(e) => handleSubmenuOpen(e, item.key)}
                       sx={{ 
                         my: 2, 
-                        mx: 1,
-                        color: activeDesktopSubmenu === item.key ? 'primary.main' : 'text.primary',
-                        backgroundColor: activeDesktopSubmenu === item.key ? 'rgba(46, 125, 50, 0.08)' : 'transparent',
+                        mx: 1.5,
+                        color: activeSubmenu === item.key ? 'primary.dark' : 'text.primary',
                         display: 'flex',
                         alignItems: 'center',
-                        fontWeight: activeDesktopSubmenu === item.key ? 600 : 400,
+                        position: 'relative',
+                        fontWeight: activeSubmenu === item.key ? 600 : 400,
                         fontSize: '0.95rem',
-                        padding: '8px 16px',
-                        borderRadius: '8px',
-                        transition: 'all 0.2s ease',
+                        padding: '6px 12px',
                         '&:hover': {
                           backgroundColor: 'rgba(46, 125, 50, 0.08)',
                           color: 'primary.main'
+                        },
+                        '&::after': {
+                          content: '""',
+                          position: 'absolute',
+                          bottom: 0,
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          width: activeSubmenu === item.key ? '80%' : '0%',
+                          height: '2px',
+                          backgroundColor: 'primary.main',
+                          transition: 'width 0.3s ease'
+                        },
+                        '&:hover::after': {
+                          width: '80%'
                         }
                       }}
                     >
@@ -455,19 +500,31 @@ const Navbar = () => {
                       onClick={handleCloseNavMenu}
                       sx={{ 
                         my: 2, 
-                        mx: 1,
-                        color: location.pathname === item.path ? 'primary.main' : 'text.primary',
-                        backgroundColor: location.pathname === item.path ? 'rgba(46, 125, 50, 0.08)' : 'transparent',
+                        mx: 1.5,
+                        color: location.pathname === item.path ? 'primary.dark' : 'text.primary',
                         display: 'flex',
                         alignItems: 'center',
+                        position: 'relative',
                         fontWeight: location.pathname === item.path ? 600 : 400,
                         fontSize: '0.95rem',
-                        padding: '8px 16px',
-                        borderRadius: '8px',
-                        transition: 'all 0.2s ease',
+                        padding: '6px 12px',
                         '&:hover': {
                           backgroundColor: 'rgba(46, 125, 50, 0.08)',
                           color: 'primary.main'
+                        },
+                        '&::after': {
+                          content: '""',
+                          position: 'absolute',
+                          bottom: 0,
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          width: location.pathname === item.path ? '80%' : '0%',
+                          height: '2px',
+                          backgroundColor: 'primary.main',
+                          transition: 'width 0.3s ease'
+                        },
+                        '&:hover::after': {
+                          width: '80%'
                         }
                       }}
                     >
@@ -476,19 +533,61 @@ const Navbar = () => {
                   )}
                 </div>
               ))}
+              {isAuthenticated && (
+                <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
+                  <Divider orientation="vertical" flexItem sx={{ mx: 2 }} />
+                  {authPages.map((page) => (
+                    <Button
+                      key={page.title}
+                      component={RouterLink}
+                      to={page.path}
+                      onClick={handleCloseNavMenu}
+                      sx={{ 
+                        my: 2, 
+                        mx: 1.5,
+                        color: location.pathname === page.path ? 'primary.dark' : 'text.primary',
+                        display: 'block',
+                        position: 'relative',
+                        fontWeight: location.pathname === page.path ? 600 : 400,
+                        fontSize: '0.95rem',
+                        padding: '6px 20px',
+                        '&:hover': {
+                          backgroundColor: 'rgba(46, 125, 50, 0.08)',
+                          color: 'primary.main'
+                        },
+                        '&::after': {
+                          content: '""',
+                          position: 'absolute',
+                          bottom: 0,
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          width: location.pathname === page.path ? '80%' : '0%',
+                          height: '2px',
+                          backgroundColor: 'primary.main',
+                          transition: 'width 0.3s ease'
+                        },
+                        '&:hover::after': {
+                          width: '80%'
+                        }
+                      }}
+                    >
+                      {page.title}
+                    </Button>
+                  ))}
+                </Box>
+              )}
             </Box>
 
-            {/* Desktop Submenu */}
+            {/* Submenu Popper */}
             <Popper
-              open={Boolean(desktopSubmenuAnchor)}
-              anchorEl={desktopSubmenuAnchor}
+              open={openSubmenu}
+              anchorEl={submenuAnchor}
               placement="bottom-start"
               transition
               disablePortal
               sx={{
                 zIndex: 1500,
-                mt: 1,
-                display: { xs: 'none', md: 'block' }
+                mt: 1
               }}
             >
               {({ TransitionProps }) => (
@@ -507,14 +606,14 @@ const Navbar = () => {
                       boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)'
                     }}
                   >
-                    <ClickAwayListener onClickAway={handleDesktopSubmenuClose}>
+                    <ClickAwayListener onClickAway={handleSubmenuClose}>
                       <Box>
-                        {activeDesktopSubmenu && menuItems.find(item => item.key === activeDesktopSubmenu)?.submenu.map((subItem) => (
+                        {activeSubmenu && menuItems.find(item => item.key === activeSubmenu)?.submenu.map((subItem) => (
                           <MenuItem
                             key={subItem.path}
                             component={RouterLink}
                             to={subItem.path}
-                            onClick={handleDesktopSubmenuClose}
+                            onClick={handleSubmenuClose}
                             selected={location.pathname === subItem.path}
                             sx={{
                               py: 1.5,
