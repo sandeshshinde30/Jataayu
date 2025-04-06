@@ -117,6 +117,49 @@ const Footer = () => {
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2, maxWidth: '600px', mx: 'auto' }}>
               {translate('footer.description')}
             </Typography>
+            {/* Contact Information */}
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+              <Typography 
+                variant="body2" 
+                color="text.secondary" 
+                sx={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: 1 
+                }}
+              >
+                <Box 
+                  component="span" 
+                  sx={{ 
+                    display: 'inline-flex', 
+                    color: 'primary.main'
+                  }}
+                >
+                  📍
+                </Box>
+                Zilla Parishad Sangli,Khanbhag, Sangli, Maharashtra 416416
+              </Typography>
+              <Typography 
+                variant="body2" 
+                color="text.secondary" 
+                sx={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: 1 
+                }}
+              >
+                <Box 
+                  component="span" 
+                  sx={{ 
+                    display: 'inline-flex', 
+                    color: 'primary.main'
+                  }}
+                >
+                  📞
+                </Box>
+                0233-2375318
+              </Typography>
+            </Box>
           </Grid>
           
           {/* Team Link */}

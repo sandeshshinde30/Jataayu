@@ -373,10 +373,10 @@ const About = () => {
           </Grid>
           <Grid item xs={12} md={4}>
             <Typography variant="h3" align="center" color="primary">
-              10+
+              {translate('about.impact.districts.number')}
             </Typography>
             <Typography variant="h6" align="center">
-              Outreach Locations {translate('common.in')} {translate('common.locations.sangli')}
+              {translate('about.impact.districts.label')} {translate('common.in')} {translate('common.locations.sangli')}
             </Typography>
           </Grid>
         </Grid>

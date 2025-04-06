@@ -206,15 +206,15 @@ export const translations = {
       "impact": {
         "title": "Our Impact",
         "centers": {
-          "number": "1000+",
+          "number": "20+",
           "label": "Rehabilitation Centers"
         },
         "lives": {
-          "number": "50,000+",
+          "number": "500+",
           "label": "Lives Transformed"
         },
         "districts": {
-          "number": "200+",
+          "number": "10+",
           "label": "Districts Covered"
         }
       }

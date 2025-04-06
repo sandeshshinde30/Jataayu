@@ -2,6 +2,9 @@ import React from 'react';
 import { Box, Container, Typography, Grid, Button, Card, CardContent, CardMedia } from '@mui/material';
 import { useLanguage } from '../context/LanguageContext';
 import HeroSlider from '../components/home/HeroSlider';
+import counselorImage from '../assets/counselor.jpg';
+import supportImage from '../assets/supportgrp.jpg';
+import rehabilitationImage from '../assets/rehab.jpg';
 
 const Home = () => {
   const { translate, getPageTitle } = useLanguage();
@@ -47,7 +50,7 @@ const Home = () => {
               <CardMedia
                 component="img"
                 height="200"
-                image="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=600&q=80"
+                image={counselorImage}
                 alt="Counseling Services"
               />
               <CardContent sx={{ flexGrow: 1 }}>
@@ -77,7 +80,7 @@ const Home = () => {
               <CardMedia
                 component="img"
                 height="200"
-                image="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=600&q=80"
+                image={supportImage}
                 alt="Support Groups"
               />
               <CardContent sx={{ flexGrow: 1 }}>
@@ -107,7 +110,7 @@ const Home = () => {
               <CardMedia
                 component="img"
                 height="200"
-                image="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=600&q=80"
+                image={rehabilitationImage}
                 alt="Rehabilitation Programs"
               />
               <CardContent sx={{ flexGrow: 1 }}>

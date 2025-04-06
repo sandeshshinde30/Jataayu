@@ -138,7 +138,7 @@ export const en = {
   footer: {
     description: 'Empowering individuals and communities through education, support, and rehabilitation for addiction recovery.',
     quickLinks: 'Quick Links',
-    contact: 'Contact',
+    contact: 'Contact', 
     copyright: 'All Rights Reserved',
     aboutUs: 'About Us',
     mission: 'Our Mission',

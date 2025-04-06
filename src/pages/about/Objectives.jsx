@@ -138,37 +138,6 @@ const Objectives = () => {
               </Grid>
             ))}
           </Grid>
-
-          <Box 
-            sx={{ 
-              mt: 6, 
-              p: 4, 
-              bgcolor: 'primary.light', 
-              borderRadius: 2,
-              textAlign: 'center'
-            }}
-          >
-            <Typography 
-              variant="h5" 
-              gutterBottom 
-              sx={{ 
-                color: 'primary.dark',
-                fontWeight: 600
-              }}
-            >
-              {translate('objectives.commitment')}
-            </Typography>
-            <Typography 
-              color="text.primary"
-              sx={{ 
-                maxWidth: 'md', 
-                mx: 'auto',
-                lineHeight: 1.8
-              }}
-            >
-              {translate('objectives.commitmentText')}
-            </Typography>
-          </Box>
         </Paper>
       </Container>
     </Box>

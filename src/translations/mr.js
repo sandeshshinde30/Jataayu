@@ -133,15 +133,15 @@ export const mr = {
     impact: {
       title: 'आमचा प्रभाव',
       centers: {
-        number: '१०००+',
+        number: '२०+',
         label: 'पुनर्वसन केंद्रे'
       },
       lives: {
-        number: '५०,०००+',
+        number: '५००+',
         label: 'बदललेली जीवने'
       },
       districts: {
-        number: '२००+',
+        number: '१०+',
         label: 'समाविष्ट जिल्हे'
       }
     }

@@ -65,9 +65,9 @@ const Navbar = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [anchorElLang, setAnchorElLang] = useState(null);
   const [navbarTransparent, setNavbarTransparent] = useState(true);
-  const [submenuAnchor, setSubmenuAnchor] = useState(null);
-  const [activeSubmenu, setActiveSubmenu] = useState(null);
-  const [openSubmenu, setOpenSubmenu] = useState(false);
+  const [mobileSubmenuOpen, setMobileSubmenuOpen] = useState(null);
+  const [desktopSubmenuAnchor, setDesktopSubmenuAnchor] = useState(null);
+  const [activeDesktopSubmenu, setActiveDesktopSubmenu] = useState(null);
 
   // Use language context
   const { language, setLanguage, translate } = useLanguage();
@@ -178,16 +178,18 @@ const Navbar = () => {
     handleCloseUserMenu();
   };
 
-  const handleSubmenuOpen = (event, menuKey) => {
-    setSubmenuAnchor(event.currentTarget);
-    setActiveSubmenu(menuKey);
-    setOpenSubmenu(true);
+  const handleMobileSubmenuClick = (menuKey) => {
+    setMobileSubmenuOpen(mobileSubmenuOpen === menuKey ? null : menuKey);
   };
 
-  const handleSubmenuClose = () => {
-    setSubmenuAnchor(null);
-    setActiveSubmenu(null);
-    setOpenSubmenu(false);
+  const handleDesktopSubmenuOpen = (event, menuKey) => {
+    setDesktopSubmenuAnchor(event.currentTarget);
+    setActiveDesktopSubmenu(menuKey);
+  };
+
+  const handleDesktopSubmenuClose = () => {
+    setDesktopSubmenuAnchor(null);
+    setActiveDesktopSubmenu(null);
   };
 
   const authPages = [
@@ -285,39 +287,101 @@ const Navbar = () => {
                 horizontal: 'left',
               }}
               open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
+              onClose={() => {
+                handleCloseNavMenu();
+                setMobileSubmenuOpen(null);
+              }}
               sx={{
                 display: { xs: 'block', md: 'none' },
                 '& .MuiPaper-root': {
-                  borderRadius: 2,
-                  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
-                  mt: 1.5
+                  width: '100%',
+                  maxWidth: '300px',
+                  position: 'absolute',
+                  top: '56px !important',
+                  left: '0 !important',
+                  borderRadius: '0 0 4px 4px',
+                  boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
+                  backgroundColor: 'white',
+                  zIndex: 1500
                 }
               }}
             >
               {menuItems.map((item) => (
                 <div key={item.key}>
                   {item.submenu ? (
-                    <MenuItem
-                      onClick={(e) => handleSubmenuOpen(e, item.key)}
-                      selected={activeSubmenu === item.key}
-                      sx={{
-                        py: 1.5,
-                        '&:hover': {
-                          backgroundColor: 'rgba(46, 125, 50, 0.08)',
-                        }
-                      }}
-                    >
-                      <ListItemIcon sx={{ color: activeSubmenu === item.key ? 'primary.main' : 'inherit' }}>
-                        {item.icon}
-                      </ListItemIcon>
-                      <ListItemText 
-                        primary={item.label}
-                        primaryTypographyProps={{
-                          fontWeight: activeSubmenu === item.key ? 600 : 400
+                    <>
+                      <MenuItem
+                        onClick={() => handleMobileSubmenuClick(item.key)}
+                        selected={mobileSubmenuOpen === item.key}
+                        sx={{
+                          py: 1.5,
+                          px: 2,
+                          minHeight: '48px',
+                          '&:hover': {
+                            backgroundColor: 'rgba(46, 125, 50, 0.08)',
+                          },
+                          '&.Mui-selected': {
+                            backgroundColor: 'rgba(46, 125, 50, 0.12)',
+                          }
                         }}
-                      />
-                    </MenuItem>
+                      >
+                        <ListItemIcon sx={{ 
+                          color: mobileSubmenuOpen === item.key ? 'primary.main' : 'text.primary',
+                          minWidth: '40px'
+                        }}>
+                          {item.icon}
+                        </ListItemIcon>
+                        <ListItemText 
+                          primary={item.label}
+                          primaryTypographyProps={{
+                            fontWeight: mobileSubmenuOpen === item.key ? 600 : 400
+                          }}
+                        />
+                      </MenuItem>
+                      <Box
+                        sx={{
+                          display: mobileSubmenuOpen === item.key ? 'block' : 'none',
+                          backgroundColor: 'rgba(0, 0, 0, 0.02)',
+                          borderLeft: '4px solid',
+                          borderColor: 'primary.main'
+                        }}
+                      >
+                        {item.submenu.map((subItem) => (
+                          <MenuItem
+                            key={subItem.path}
+                            component={RouterLink}
+                            to={subItem.path}
+                            onClick={() => {
+                              handleCloseNavMenu();
+                              setMobileSubmenuOpen(null);
+                            }}
+                            selected={location.pathname === subItem.path}
+                            sx={{
+                              py: 1.25,
+                              pl: 6,
+                              pr: 2,
+                              minHeight: '42px',
+                              '&:hover': {
+                                backgroundColor: 'rgba(46, 125, 50, 0.08)',
+                              },
+                              '&.Mui-selected': {
+                                backgroundColor: 'rgba(46, 125, 50, 0.12)',
+                              }
+                            }}
+                          >
+                            <Typography
+                              sx={{
+                                fontWeight: location.pathname === subItem.path ? 600 : 400,
+                                color: location.pathname === subItem.path ? 'primary.main' : 'inherit',
+                                fontSize: '0.9rem'
+                              }}
+                            >
+                              {subItem.label}
+                            </Typography>
+                          </MenuItem>
+                        ))}
+                      </Box>
+                    </>
                   ) : (
                     <MenuItem
                       component={RouterLink}
@@ -326,12 +390,20 @@ const Navbar = () => {
                       selected={location.pathname === item.path}
                       sx={{
                         py: 1.5,
+                        px: 2,
+                        minHeight: '48px',
                         '&:hover': {
                           backgroundColor: 'rgba(46, 125, 50, 0.08)',
+                        },
+                        '&.Mui-selected': {
+                          backgroundColor: 'rgba(46, 125, 50, 0.12)',
                         }
                       }}
                     >
-                      <ListItemIcon sx={{ color: location.pathname === item.path ? 'primary.main' : 'inherit' }}>
+                      <ListItemIcon sx={{ 
+                        color: location.pathname === item.path ? 'primary.main' : 'text.primary',
+                        minWidth: '40px'
+                      }}>
                         {item.icon}
                       </ListItemIcon>
                       <ListItemText 
@@ -344,33 +416,6 @@ const Navbar = () => {
                   )}
                 </div>
               ))}
-              {isAuthenticated && (
-                <>
-                  <Divider sx={{ my: 1 }} />
-                  {authPages.map((page) => (
-                    <MenuItem
-                      key={page.title}
-                      component={RouterLink}
-                      to={page.path}
-                      onClick={handleCloseNavMenu}
-                      selected={location.pathname === page.path}
-                      sx={{
-                        py: 1.5,
-                        '&:hover': {
-                          backgroundColor: 'rgba(46, 125, 50, 0.08)',
-                        }
-                      }}
-                    >
-                      <ListItemText 
-                        primary={page.title}
-                        primaryTypographyProps={{
-                          fontWeight: location.pathname === page.path ? 600 : 400
-                        }}
-                      />
-                    </MenuItem>
-                  ))}
-                </>
-              )}
             </Menu>
 
             {/* Desktop Menu */}
@@ -379,34 +424,22 @@ const Navbar = () => {
                 <div key={item.key}>
                   {item.submenu ? (
                     <Button
-                      onClick={(e) => handleSubmenuOpen(e, item.key)}
+                      onClick={(e) => handleDesktopSubmenuOpen(e, item.key)}
                       sx={{ 
                         my: 2, 
-                        mx: 1.5,
-                        color: activeSubmenu === item.key ? 'primary.dark' : 'text.primary',
+                        mx: 1,
+                        color: activeDesktopSubmenu === item.key ? 'primary.main' : 'text.primary',
+                        backgroundColor: activeDesktopSubmenu === item.key ? 'rgba(46, 125, 50, 0.08)' : 'transparent',
                         display: 'flex',
                         alignItems: 'center',
-                        position: 'relative',
-                        fontWeight: activeSubmenu === item.key ? 600 : 400,
+                        fontWeight: activeDesktopSubmenu === item.key ? 600 : 400,
                         fontSize: '0.95rem',
-                        padding: '6px 12px',
+                        padding: '8px 16px',
+                        borderRadius: '8px',
+                        transition: 'all 0.2s ease',
                         '&:hover': {
                           backgroundColor: 'rgba(46, 125, 50, 0.08)',
                           color: 'primary.main'
-                        },
-                        '&::after': {
-                          content: '""',
-                          position: 'absolute',
-                          bottom: 0,
-                          left: '50%',
-                          transform: 'translateX(-50%)',
-                          width: activeSubmenu === item.key ? '80%' : '0%',
-                          height: '2px',
-                          backgroundColor: 'primary.main',
-                          transition: 'width 0.3s ease'
-                        },
-                        '&:hover::after': {
-                          width: '80%'
                         }
                       }}
                     >
@@ -419,31 +452,19 @@ const Navbar = () => {
                       onClick={handleCloseNavMenu}
                       sx={{ 
                         my: 2, 
-                        mx: 1.5,
-                        color: location.pathname === item.path ? 'primary.dark' : 'text.primary',
+                        mx: 1,
+                        color: location.pathname === item.path ? 'primary.main' : 'text.primary',
+                        backgroundColor: location.pathname === item.path ? 'rgba(46, 125, 50, 0.08)' : 'transparent',
                         display: 'flex',
                         alignItems: 'center',
-                        position: 'relative',
                         fontWeight: location.pathname === item.path ? 600 : 400,
                         fontSize: '0.95rem',
-                        padding: '6px 12px',
+                        padding: '8px 16px',
+                        borderRadius: '8px',
+                        transition: 'all 0.2s ease',
                         '&:hover': {
                           backgroundColor: 'rgba(46, 125, 50, 0.08)',
                           color: 'primary.main'
-                        },
-                        '&::after': {
-                          content: '""',
-                          position: 'absolute',
-                          bottom: 0,
-                          left: '50%',
-                          transform: 'translateX(-50%)',
-                          width: location.pathname === item.path ? '80%' : '0%',
-                          height: '2px',
-                          backgroundColor: 'primary.main',
-                          transition: 'width 0.3s ease'
-                        },
-                        '&:hover::after': {
-                          width: '80%'
                         }
                       }}
                     >
@@ -452,94 +473,63 @@ const Navbar = () => {
                   )}
                 </div>
               ))}
-              {isAuthenticated && authPages.map((page) => (
-                <Button
-                  key={page.title}
-                  component={RouterLink}
-                  to={page.path}
-                  onClick={handleCloseNavMenu}
-                  sx={{ 
-                    my: 2, 
-                    mx: 1.5,
-                    color: location.pathname === page.path ? 'primary.dark' : 'text.primary',
-                    display: 'block',
-                    position: 'relative',
-                    fontWeight: location.pathname === page.path ? 600 : 400,
-                    fontSize: '0.95rem',
-                    padding: '6px 20px',
-                    '&:hover': {
-                      backgroundColor: 'rgba(46, 125, 50, 0.08)',
-                      color: 'primary.main'
-                    },
-                    '&::after': {
-                      content: '""',
-                      position: 'absolute',
-                      bottom: 0,
-                      left: '50%',
-                      transform: 'translateX(-50%)',
-                      width: location.pathname === page.path ? '80%' : '0%',
-                      height: '2px',
-                      backgroundColor: 'primary.main',
-                      transition: 'width 0.3s ease'
-                    },
-                    '&:hover::after': {
-                      width: '80%'
-                    }
-                  }}
-                >
-                  {page.title}
-                </Button>
-              ))}
             </Box>
 
-            {/* Submenu */}
+            {/* Desktop Submenu */}
             <Popper
-              open={openSubmenu}
-              anchorEl={submenuAnchor}
+              open={Boolean(desktopSubmenuAnchor)}
+              anchorEl={desktopSubmenuAnchor}
               placement="bottom-start"
               transition
               disablePortal
               sx={{
-                zIndex: 1300,
-                mt: -1
+                zIndex: 1500,
+                mt: 1,
+                display: { xs: 'none', md: 'block' }
               }}
             >
               {({ TransitionProps }) => (
                 <Grow 
                   {...TransitionProps}
-                  style={{ transformOrigin: '0 0 0' }}
+                  style={{ transformOrigin: 'top left' }}
+                  timeout={200}
                 >
                   <Paper
-                    elevation={3}
+                    elevation={4}
                     sx={{
-                      borderRadius: 2,
-                      minWidth: 200,
-                      mt: 1,
-                      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
-                      overflow: 'hidden'
+                      borderRadius: '8px',
+                      minWidth: '200px',
+                      overflow: 'hidden',
+                      mt: 0.5,
+                      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)'
                     }}
                   >
-                    <ClickAwayListener onClickAway={handleSubmenuClose}>
+                    <ClickAwayListener onClickAway={handleDesktopSubmenuClose}>
                       <Box>
-                        {activeSubmenu && menuItems.find(item => item.key === activeSubmenu)?.submenu.map((subItem) => (
+                        {activeDesktopSubmenu && menuItems.find(item => item.key === activeDesktopSubmenu)?.submenu.map((subItem) => (
                           <MenuItem
                             key={subItem.path}
                             component={RouterLink}
                             to={subItem.path}
-                            onClick={handleSubmenuClose}
+                            onClick={handleDesktopSubmenuClose}
                             selected={location.pathname === subItem.path}
                             sx={{
                               py: 1.5,
                               px: 3,
+                              minHeight: '42px',
                               '&:hover': {
                                 backgroundColor: 'rgba(46, 125, 50, 0.08)',
+                              },
+                              '&.Mui-selected': {
+                                backgroundColor: 'rgba(46, 125, 50, 0.12)',
                               }
                             }}
                           >
                             <Typography
                               sx={{
                                 fontWeight: location.pathname === subItem.path ? 600 : 400,
-                                color: location.pathname === subItem.path ? 'primary.main' : 'inherit'
+                                color: location.pathname === subItem.path ? 'primary.main' : 'inherit',
+                                fontSize: '0.95rem'
                               }}
                             >
                               {subItem.label}
