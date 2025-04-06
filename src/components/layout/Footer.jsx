@@ -128,15 +128,7 @@ const Footer = () => {
                   gap: 1 
                 }}
               >
-                <Box 
-                  component="span" 
-                  sx={{ 
-                    display: 'inline-flex', 
-                    color: 'primary.main'
-                  }}
-                >
-                  📍
-                </Box>
+              
                 Zilla Parishad Sangli,Khanbhag, Sangli, Maharashtra 416416
               </Typography>
               <Typography 

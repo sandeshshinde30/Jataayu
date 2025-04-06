@@ -1,7 +1,9 @@
 import React from 'react';
 import { Container, Typography, Box, Paper, Avatar, Grid, Divider } from '@mui/material';
 import { useLanguage } from '../context/LanguageContext';
-
+import laxmikant from '../assets/laxmikant.jpg';
+import shreyashp from '../assets/ssp.jpg';
+import shreyashd from '../assets/deotale.jpg';
 const Team = () => {
   const { translate } = useLanguage();
   
@@ -9,17 +11,17 @@ const Team = () => {
     {
       name: 'Laxmikant Mahindrakar',
       role: 'Developer',
-      avatar: '/avatar-placeholder.jpg'
+      avatar: laxmikant
     },
     {
       name: 'Shreyash Deotale',
       role: 'Developer',
-      avatar: '/avatar-placeholder.jpg'
+      avatar: shreyashd
     },
     {
       name: 'Shreyash Pawar',
       role: 'Developer',
-      avatar: '/avatar-placeholder.jpg'
+      avatar: shreyashp
     }
   ];
 

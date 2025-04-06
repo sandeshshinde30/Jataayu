@@ -202,7 +202,10 @@ const Navbar = () => {
   ];
 
   if (user?.role === 'admin') {
-    authPages.push({ title: translate('nav.admin'), path: '/admin' });
+    authPages.push(
+      { title: translate('nav.admin'), path: '/admin' },
+      { title: translate('nav.createEvent'), path: '/events/create' }
+    );
   } else if (user?.role === 'Official_member') {
     authPages.push({ title: translate('nav.management'), path: '/management' });
   }
