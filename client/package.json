@@ -16,10 +16,12 @@
     "@mui/lab": "^5.0.0-alpha.165",
     "@mui/material": "^5.15.10",
     "@mui/x-date-pickers": "^6.18.6",
+    "@react-pdf/renderer": "^4.3.0",
     "@reduxjs/toolkit": "^2.2.1",
     "axios": "^1.6.7",
     "date-fns": "^2.30.0",
     "framer-motion": "^12.6.3",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^15.4.1",
@@ -35,5 +37,9 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "vite": "^5.1.0"
+  },
+  "notes": {
+    "lodash": "Imported in src/pages/Events.jsx",
+    "@react-pdf/renderer": "Imported in src/components/RegistrationsPDF.jsx"
   }
 }
