@@ -27,6 +27,7 @@ import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import AudiotrackIcon from '@mui/icons-material/Audiotrack';
 import { styled } from '@mui/material/styles';
+import { API_BASE_URL } from '../../config/api';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -77,9 +78,7 @@ const initiatives = {
 };
 
 // Add server URL configuration
-const SERVER_URL = process.env.NODE_ENV === 'production' 
-  ? window.location.origin 
-  : 'http://localhost:5000';
+const SERVER_URL = API_BASE_URL;
 
 const InitiativeForm = ({ initialData, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({

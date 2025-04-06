@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { API_ENDPOINT } from '../../config/api';
 
 const API_URL = 'http://89.116.122.208:5000/api';
 

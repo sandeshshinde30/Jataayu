@@ -51,10 +51,9 @@ import {
   Audiotrack as AudiotrackIcon,
   Refresh as RefreshIcon
 } from '@mui/icons-material';
+import { API_BASE_URL } from '../config/api';
 
-const SERVER_URL = process.env.NODE_ENV === 'production' 
-  ? window.location.origin 
-  : 'http://localhost:5000';
+const SERVER_URL = API_BASE_URL;
 
 const InitiativeDetails = () => {
   const theme = useTheme();
