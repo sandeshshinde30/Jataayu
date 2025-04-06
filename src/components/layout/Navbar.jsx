@@ -195,9 +195,7 @@ const Navbar = () => {
     setMobileSubmenuOpen(mobileSubmenuOpen === menuKey ? null : menuKey);
   };
 
-  const authPages = [
-    { title: translate('nav.dashboard'), path: '/dashboard' },
-  ];
+  const authPages = [];
 
   const settings = [
     { title: translate('nav.profile'), path: '/dashboard' },
@@ -205,11 +203,7 @@ const Navbar = () => {
   ];
 
   if (user?.role === 'admin') {
-    authPages.push(
-      { title: translate('nav.admin'), path: '/admin' },
-      { title: translate('nav.createEvent'), path: '/events/create' },
-      { title: translate('nav.manageEvents'), path: '/events/manage' }
-    );
+    authPages.push({ title: translate('nav.admin'), path: '/admin' });
   } else if (user?.role === 'Official_member') {
     authPages.push({ title: translate('nav.management'), path: '/management' });
   }
