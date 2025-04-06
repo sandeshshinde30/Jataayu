@@ -18,6 +18,7 @@ import {
 import { styled } from '@mui/material/styles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { API_BASE_URL } from '../config/api';
 
 const StyledBreadcrumbLink = styled(Link)(({ theme }) => ({
   textDecoration: 'none',
@@ -37,10 +38,6 @@ const StyledCardLink = styled(Link)(({ theme }) => ({
     textDecoration: 'none'
   }
 }));
-
-const SERVER_URL = process.env.NODE_ENV === 'production' 
-  ? window.location.origin 
-  : 'http://localhost:5000';
 
 const categoryMap = {
   'rehabilitation': {
@@ -94,7 +91,7 @@ const SubInitiativeDetail = () => {
       setLoading(true); // Always start with loading state
       // Add a cache-busting timestamp to the URL
       const timestamp = new Date().getTime();
-      const response = await fetch(`${SERVER_URL}/api/initiatives?category=${category}&subCategory=${categoryMap[category].subinitiatives[subinitiative]}&_=${timestamp}`, {
+      const response = await fetch(`${API_BASE_URL}/api/initiatives?category=${category}&subCategory=${categoryMap[category].subinitiatives[subinitiative]}&_=${timestamp}`, {
         // Add cache control to prevent browser caching
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -206,7 +203,7 @@ const SubInitiativeDetail = () => {
                         <CardMedia
                           component="img"
                           height="200"
-                          image={`${SERVER_URL}/${initiative.images[0].path}`}
+                          image={`${API_BASE_URL}${initiative.images[0].path}`}
                           alt={initiative.title}
                           onError={(e) => {
                             console.error('Image load error:', e);

@@ -21,6 +21,7 @@ import {
 import { styled } from '@mui/material/styles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { API_BASE_URL } from '../config/api';
 
 const StyledBreadcrumbLink = styled(Link)(({ theme }) => ({
   textDecoration: 'none',
@@ -101,7 +102,7 @@ const InitiativeCategory = () => {
             <CardMedia
               component="img"
               height="200"
-              image={`${SERVER_URL}/${initiative.images[0].path}`}
+              image={`${API_BASE_URL}${initiative.images[0].path}`}
               alt={initiative.title}
               onError={(e) => {
                 console.error('Image load error:', e);
